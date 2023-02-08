@@ -1,11 +1,12 @@
-import { AdEntity } from "../types";
+import { FieldPacket } from "mysql2";
+import { AdEntity, NewAdEntity } from "../types";
+import { pool } from "../utils/db";
 import { ValidationError } from "../utils/errors";
 
-interface NewAdEntity extends Omit<AdEntity, 'id'> {
-    id?: string; //ominelismy id i wstawiamy id ktore jest nieobowiazkowe
-}
+type AdRecordResults = [AdEntity[], FieldPacket[]];
 
 export class AdRecord implements AdEntity {
+
     public id: string;
     public name: string;
     public description: string;
@@ -36,6 +37,7 @@ export class AdRecord implements AdEntity {
             throw new ValidationError('Nie mozna zlokalizowac ogloszenia.')
         }
 
+        this.id = obj.id;
         this.name = obj.name;
         this.description = obj.description;
         this.price = obj.price;
@@ -43,4 +45,12 @@ export class AdRecord implements AdEntity {
         this.lat = obj.lat;
         this.lon = obj.lon;
     }
+
+    static async getOne(id: string): Promise<AdRecord | null> {
+        const [results] = await pool.execute("SELECT * FROM `ads` WHERE id = :id", {
+            id: id,
+        }) as AdRecordResults;
+
+        return results.length === 0 ? null : new AdRecord(results[0]);
+    } 
 }

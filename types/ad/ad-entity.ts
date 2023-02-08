@@ -1,3 +1,6 @@
+export interface NewAdEntity extends Omit<AdEntity, 'id'> {
+    id?: string; //ominelismy id i wstawiamy id ktore jest nieobowiazkowe
+}
 export interface AdEntity {
     id: string;
     name: string;

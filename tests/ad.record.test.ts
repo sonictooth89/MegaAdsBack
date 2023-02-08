@@ -19,9 +19,9 @@ test('Validates invalid price', () => {
             name: 'Test Name',
             description: 'blah',
             url: 'https://megak.pl',
-            price: -3,
-            lat: 9,
-            lon: 9,
+            price: 22,
+            lat: 9.3323111,
+            lon: 9.3245123,
     })).toThrow('Cena nie moze byc mniejsza niz 0 lub wieksza niz 9 999 999.')
 })
 
