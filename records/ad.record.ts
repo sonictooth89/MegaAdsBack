@@ -1,12 +1,11 @@
 import { FieldPacket } from "mysql2";
-import { AdEntity, NewAdEntity } from "../types";
+import { AdEntity, NewAdEntity, SimpleAdEntity } from "../types";
 import { pool } from "../utils/db";
 import { ValidationError } from "../utils/errors";
 
 type AdRecordResults = [AdEntity[], FieldPacket[]];
 
 export class AdRecord implements AdEntity {
-
     public id: string;
     public name: string;
     public description: string;
@@ -53,4 +52,15 @@ export class AdRecord implements AdEntity {
 
         return results.length === 0 ? null : new AdRecord(results[0]);
     } 
+
+    static async findAll(name: string): Promise<SimpleAdEntity[]> {
+        const [results] = await pool.execute("SELECT * FROM `ads` WHERE `name` LIKE :search", {
+            search: `%[name]%`,
+        }) as AdRecordResults;
+
+        return results.map(result => {
+            const {id, lat, lon} = result;
+            return {id, lat, lon};
+        });
+    }
 }
