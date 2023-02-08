@@ -68,3 +68,26 @@ test('AdRecord.findAll returns smaller amount of data.', async () => {
     expect((ads[0] as AdEntity).description).toBeUndefined();
 
 });
+
+test('AdRecord.insert returns UUID.', async () => {
+
+    const ad = new AdRecord(defaultObj);
+    await ad.insert();
+
+    expect(ad.id).toBeDefined();
+    expect(typeof ad.id).toBe('string');
+
+});
+
+test('AdRecord.insert inserts data to database.', async () => {
+
+    const ad = new AdRecord(defaultObj);
+    await ad.insert();
+
+    const foundAd = await AdRecord.findAll.getOne(ad.id);
+
+    expect(foundAd).toBeDefined();
+    expect(foundAd).not.toBeNull();
+    expect(foundAd.id).toBe(ad.id);
+
+});
