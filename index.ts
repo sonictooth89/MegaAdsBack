@@ -18,7 +18,7 @@ app.use(rateLimit({
 	max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
 }))
 
-app.use('/', adRouter);
+app.use('/ad', adRouter);
 
 // app.get('/', async (req, res) => {
 //     throw new ValidationError('Daaamn!');
