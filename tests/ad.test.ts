@@ -62,14 +62,14 @@ test('AdRecord.findAll returns empty array when searching for something that doe
 
 test('AdRecord.findAll returns smaller amount of data.', async () => {
 
-    const ads = await AdRecord.findAll('-----------------------------------------');
+    const ads = await AdRecord.findAll('');
 
     expect((ads[0] as AdEntity).price).toBeUndefined();
     expect((ads[0] as AdEntity).description).toBeUndefined();
 
 });
 
-test('AdRecord.insert returns UUID.', async () => {
+test('AdRecord.insert returns new UUID.', async () => {
 
     const ad = new AdRecord(defaultObj);
     await ad.insert();
@@ -84,10 +84,10 @@ test('AdRecord.insert inserts data to database.', async () => {
     const ad = new AdRecord(defaultObj);
     await ad.insert();
 
-    const foundAd = await AdRecord.findAll.getOne(ad.id);
+    const foundAd = await AdRecord.getOne(ad.id);
 
     expect(foundAd).toBeDefined();
     expect(foundAd).not.toBeNull();
     expect(foundAd.id).toBe(ad.id);
 
-});
+})
